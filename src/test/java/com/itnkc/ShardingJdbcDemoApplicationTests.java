@@ -2,7 +2,9 @@ package com.itnkc;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.itnkc.dao.CourseDAO;
+import com.itnkc.dao.UserDAO;
 import com.itnkc.entity.Course;
+import com.itnkc.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +18,9 @@ public class ShardingJdbcDemoApplicationTests {
     @Autowired
     private CourseDAO courseDAO;
 
+    @Autowired
+    private UserDAO userDAO;
+
     @Test
     public void addCourse() {
         for (int i = 1; i <= 10; i++) {
@@ -28,21 +33,21 @@ public class ShardingJdbcDemoApplicationTests {
     }
 
     @Test
-    public void findCourse(){
+    public void findCourse() {
         QueryWrapper<Course> wrapper = new QueryWrapper<>();
-        wrapper.eq("cid",712782545846009857L);
+        wrapper.eq("cid", 712782545846009857L);
         Course course = courseDAO.selectOne(wrapper);
         System.out.println(course);
     }
 
     @Test
-    public void findAll(){
+    public void findAll() {
         List<Course> courses = courseDAO.selectList(new QueryWrapper<>());
         System.out.println(courses);
     }
 
     @Test
-    public void addCourseDb(){
+    public void addCourseDb() {
         Course course = new Course();
         course.setCname("javaDemo");
         course.setUserId(101L);
@@ -51,10 +56,19 @@ public class ShardingJdbcDemoApplicationTests {
     }
 
     @Test
-    public void selectOne(){
+    public void selectOne() {
         QueryWrapper<Course> wrapper = new QueryWrapper<>();
-        wrapper.eq("cid",712791348788330497L);
+        wrapper.eq("cid", 712791348788330497L);
         Course course = courseDAO.selectOne(wrapper);
         System.out.println(course);
+    }
+
+    //***********************垂直分表***************************
+    @Test
+    public void insert() {
+        User user = new User();
+        user.setUsername("lucy");
+        user.setUstatus("Normal");
+        userDAO.insert(user);
     }
 }
